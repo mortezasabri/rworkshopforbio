@@ -1,0 +1,1955 @@
+---
+title: "R_Workshop_Part1(programming)_02/18/2019"
+author: "Morteza Sabri"
+date: "02/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+
+Reference: 
+
+**Based R Programming:** https://github.com/swirldev/swirl_courses/
+
+**The R Programming Environment:** https://www.coursera.org/learn/r-programming-environment/
+**Advanced R Programming:** https://www.coursera.org/learn/advanced-r/ 
+
+
+# Section 1: R Programming
+## 1.1 Basic Building Blocks
+In this lesson, we will explore some basic building blocks of the R programming language.
+
+### Arithmetic
+R can be used as an interactive calculator:
+```{r}
+5+7
+```
+
+### Variable
+The way you assign a value to a variable in R is by using the assignment operator, which is just a 'less than' symbol followed by a 'minus' sign. It looks like this: <-
+To assign the result of 5 + 7 to a new variable called x, you type x <- 5 + 7:
+```{r}
+x <- 5+7
+```
+To view the contents of the variable x, just type x and press Enter.
+```{r}
+x
+```
+Now, store the result of x - 3 in a new variable called y.
+```{r}
+y <- x-3
+```
+What is the value of y? Type y to find out.
+```{r}
+y
+```
+
+### Vector
+Now, let's create a small collection of numbers called a **vector**. Any object that contains data is called a data structure and numeric vectors are the simplest type of data structure in R.
+The easiest way to create a vector is with the c() function, which stands for '' or 'combine'. To create a vector containing the numbers 1.1, 9, and 3.14, type c(1.1, 9, 3.14).
+```{r}
+z <- c(1.1, 9, 3.14)
+```
+
+### `?` command
+Anytime you have questions about a particular function, you can access R's built-in help files via the `?` command. For example, if you want more information on the c() function, type ?c without the parentheses that normally follow a function name.
+```{r}
+?c
+```
+Type z to view its contents.
+```{r}
+z
+```
+You can combine vectors to make a new vector. Create a new vector that contains z, 555, then z again in that order.
+```{r}
+c(z, 555, z)
+```
+Numeric vectors can be used in arithmetic expressions.
+```{r}
+z * 2 + 100
+```
+
+### Arithmetic operators
+Other common arithmetic operators are `+`, `-`, `/`, and `^` (where x^2 means 'x squared'). To take the square root, use the sqrt() function and to take the absolute value, use the abs() function.
+Take the square root of z - 1 and assign it to a new variable called my_sqrt.
+```{r}
+my_sqrt <- sqrt(z-1)
+```
+Print the contents of my_sqrt.
+```{r}
+my_sqrt
+```
+Now, create a new variable called my_div that gets the value of z divided by my_sqrt.
+```{r}
+my_div <- z/my_sqrt
+```
+Print the contents of my_div.
+```{r}
+my_div
+```
+
+### Arithmetic operation element-by-element
+When given two vectors of the same length, R simply performs the specified arithmetic operation (`+`, `-`, `*`, etc.) element-by-element. If the vectors are of different lengths, R 'recycles' the shorter vector until it is the same length as the longer vector.
+
+### Recycling
+To see how this vector 'recycling' works, try adding c(1, 2, 3, 4) and c(0, 10).
+```{r}
+c(1, 2, 3, 4) + c(0, 10)
+```
+If the length of the shorter vector does not divide evenly into the length of the longer vector, R will still apply the 'recycling' method, but will throw a warning to let you know something fishy might be going on.
+```{r}
+c(1, 2, 3, 4) + c(0, 10, 100)
+```
+
+```{r}
+rm(list=ls())
+```
+
+## 1.2 Workspace and Files 
+In this lesson, you'll learn how to examine your local workspace in R and begin to explore the relationship between your workspace and the file system of your machine.
+
+### `getwd()`
+Determine which directory your R session is using as its current working directory using getwd().
+```{r}
+getwd()
+```
+
+### `ls()`
+List all the objects in your local workspace using ls().
+```{r}
+ls()
+```
+Some R commands are the same as their equivalents commands on Linux or on a Mac. Both Linux and Mac operating systems are based on an operating system called Unix. It's always a good idea to learn more about Unix!
+Assign 9 to x using x <- 9.
+```{r}
+x <- 9
+```
+Now take a look at objects that are in your workspace using ls().
+```{r}
+ls()
+```
+
+### `dir()`
+List all the files in your working directory using list.files() or dir().
+```{r}
+list.files()
+dir()
+```
+
+### `args()`
+args() function on a function name is also a handy way to see what arguments a function can take.
+Use the args() function to determine the arguments to list.files().
+```{r}
+args(list.files)
+```
+Assign the value of the current working directory to a variable called "old.dir".
+```{r}
+old.dir <- getwd()
+```
+We will use old.dir at the end of this lesson to move back to the place that we started. A lot of query functions like getwd() have the useful property that they return the answer to the question as a result of the function.
+
+### `dir.create()`
+Use dir.create() to create a directory in the current working directory called "testdir".
+```{r}
+dir.create("testdir")
+```
+We will do all our work in this new directory and then delete it after we are done. This is the R analog to "Take only pictures, leave only footprints."
+
+### `setwd()`
+Set your working directory to "testdir" with the setwd() command.
+```{r}
+setwd("testdir")
+```
+
+### `file.create()`
+Create a file in your working directory called "mytest.R" using the file.create() function.
+```{r}
+file.create("mytest.R")
+```
+This should be the only file in this newly created directory. Let's check this by listing all the files in the current directory.
+```{r}
+dir()
+```
+
+### `file.exists()`
+Check to see if "mytest.R" exists in the working directory using the file.exists() function.
+```{r}
+file.exists("mytest.R")
+```
+
+### `file.info()`
+Access information about the file "mytest.R" by using file.info().
+```{r}
+file.info("mytest.R")
+```
+
+### `$`
+You can use the $ operator --- e.g., file.info("mytest.R")$mode --- to grab specific items.
+```{r}
+file.info("mytest.R")$mode
+```
+
+### `file.rename()`
+Change the name of the file "mytest.R" to "mytest2.R" by using file.rename().
+```{r}
+file.rename("mytest.R", "mytest2.R")
+```
+
+### `file.remove()`
+Your operating system will provide simpler tools for these sorts of tasks, but having the ability to manipulate files programatically is useful. You might now try to delete mytest.R using file.remove('mytest.R'), but that won't work since mytest.R no longer exists. You have already renamed it.
+
+### `file.copy()`
+Make a copy of "mytest2.R" called "mytest3.R" using file.copy().
+```{r}
+file.copy("mytest2.R", "mytest3.R")
+```
+
+### `file.path()`
+Provide the relative path to the file "mytest3.R" by using file.path().
+```{r}
+file.path("mytest3.R")
+```
+You can use file.path to construct file and directory paths that are independent of the operating system your R code is running on. Pass 'folder1' and 'folder2' as arguments to file.path to make a platform-independent pathname.
+```{r}
+file.path("folder1", "folder2")
+```
+Create a directory in the current working directory called "testdir2" and a subdirectory for it called "testdir3", all in one command by using dir.create() and file.path().
+```{r}
+dir.create(file.path('testdir2', 'testdir3'), recursive = TRUE)
+```
+Go back to your original working directory using setwd(). (Recall that we created the variable old.dir with the full path for the orginal working directory at the start of these questions.)
+```{r}
+setwd(old.dir)
+```
+
+### `unlink()`
+```{r}
+unlink("testdir", recursive = T)
+unlink("testdir2", recursive = T)
+```
+
+```{r}
+rm(list=ls())
+```
+
+## 1.3 Sequences of Numbers
+
+### `:`
+In this lesson, you'll learn how to create sequences of numbers in R.
+The simplest way to create a sequence of numbers in R is by using the `:` operator. Type 1:20 to see how it works.
+```{r}
+1:20
+```
+That gave us every integer between (and including) 1 and 20. We could also use it to create a sequence of real numbers. For example, try pi:10.
+```{r}
+pi:10
+```
+The result is a vector of real numbers starting with pi (3.142...) and increasing in increments of 1. The upper limit of 10 is never reached, since the next number in our sequence would be greater than 10.
+
+What happens if we do 15:1? Give it a try to find out.
+```{r}
+15:1
+```
+It counted backwards in increments of 1!
+
+### `seq()`
+The most basic use of seq() does exactly the same thing as the `:` operator. Try seq(1, 20) to see this.
+```{r}
+seq(1, 20)
+```
+This gives us the same output as 1:20. However, let's say that instead we want a vector of numbers ranging from 0 to 10, incremented by 0.5. seq(0, 10, by=0.5) does just that.
+```{r}
+seq(0, 10, by=0.5)
+```
+Or maybe we don't care what the increment is and we just want a sequence of 30 numbers between 5 and 10. seq(5, 10, length=30) does the trick. Give it a shot now and store the result in a new variable called my_seq.
+```{r}
+my_seq <- seq(5, 10, length=30)
+```
+
+### `length()`
+To confirm that my_seq has length 30, we can use the length() function.
+```{r}
+length(my_seq)
+```
+Let's pretend we don't know the length of my_seq, but we want to generate a sequence of integers from 1 to N, where N represents the length of the my_seq vector. In other words, we want a new vector (1, 2, 3, ...) that is the same length as my_seq. There are several ways we could do this. One possibility is to combine the `:` operator and the length() function like this: 1:length(my_seq).
+```{r}
+1:length(my_seq)
+```
+Another option is to use seq(along.with = my_seq).
+```{r}
+seq(along.with = my_seq)
+```
+
+### `seq_along()`
+Another option is to use seq(along.with = my_seq).
+```{r}
+seq(along.with = my_seq)
+```
+However, as is the case with many common tasks, R has a separate built-in function for this purpose called seq_along().
+```{r}
+seq_along(my_seq)
+```
+There are often several approaches to solving the same problem, particularly in R. Simple approaches that involve less typing are generally best. It's also important for your code to be readable, so that you and others can figure out what's going on without too much hassle.
+
+If R has a built-in function for a particular task, it's likely that function is highly optimized for that purpose and is your best option. As you become a more advanced R programmer, you'll design your own functions to perform tasks when there are no better options. We'll explore writing your own functions in future lessons.
+
+### `rep()`
+One more function related to creating sequences of numbers is rep(), which stands for 'replicate'. Let's look at a few uses.
+
+If we're interested in creating a vector that contains 40 zeros, we can use rep(0, times = 40).
+```{r}
+rep(0, times=40)
+```
+If instead we want our vector to contain 10 repetitions of the vector (0, 1, 2), we can do rep(c(0, 1, 2), times = 10).
+```{r}
+rep(c(0, 1, 2), times = 10)
+```
+Finally, let's say that rather than repeating the vector (0, 1, 2) over and over again, we want our vector to contain 10 zeros, then 10 ones, then 10 twos. We can do this with the `each` argument.
+```{r}
+rep(c(0, 1, 2), each = 10)
+```
+
+```{r}
+rm(list=ls())
+```
+
+## 1.4 Vectors
+The simplest and most common data structure in R is the vector. Vectors come in two different flavors: **atomic vectors** and **lists**. An atomic vector contains exactly one data type, whereas a list may contain multiple data types.
+
+### Atomic vector
+In previous lessons, we dealt entirely with numeric vectors, which are one type of atomic vector. Other types of atomic vectors include **logical, character, integer, and complex**. In this lesson, we'll take a closer look at logical and character vectors.
+
+### Logical vectors
+Logical vectors can contain the values TRUE, FALSE, and NA (for 'not available'). These values are generated as the result of logical 'conditions'. Let's experiment with some simple conditions.
+
+First, create a numeric vector num_vect that contains the values 0.5, 55, -10, and 6.
+```{r}
+num_vect <- c(0.5, 55, -10, 6)
+```
+Now, create a variable called tf that gets the result of num_vect < 1, which is read as 'num_vect is less than 1'.
+```{r}
+tf <- num_vect < 1
+```
+Print the contents of tf now.
+```{r}
+tf
+```
+The first element of num_vect is 0.5, which is less than 1 and therefore the statement 0.5 < 1 is TRUE. The second element of num_vect is 55, which is greater than 1, so the statement 55 < 1 is FALSE.
+```{r}
+num_vect >= 6 
+```
+This time, we are asking whether each individual element of num_vect is greater than OR equal to 6.
+
+### Logical operators
+The `<` and `>=` symbols in these examples are called 'logical operators'. Other logical operators include `>`, `<=`, `==` for exact equality, and `!=` for inequality.
+
+If we have two logical expressions, A and B, we can ask whether at least one is TRUE with A | B (logical 'or' a.k.a. 'union') or whether they are both TRUE with A & B (logical 'and' a.k.a. 'intersection'). Lastly, !A is the negation of A and is TRUE when A is FALSE and vice versa.
+```{r}
+(3 > 5) & (4 == 4)
+(TRUE == TRUE) | (TRUE == FALSE)
+((111 >= 111) | !(TRUE)) & ((4 + 1) == 5)
+```
+Character vectors are also very common in R. Double quotes are used to distinguish character objects, as in the following example.
+
+Create a character vector that contains the following words: "My", "name", "is". Remember to enclose each word in its own set of double quotes, so that R knows they are character strings. Store the vector in a variable called my_char.
+```{r}
+my_char <- c("My", "name", "is")
+```
+
+### `paste()`
+Right now, my_char is a character vector of length 3. Let's say we want to join the elements of my_char together into one continuous character string (i.e. a character vector of length 1). We can do this using the **`paste()`** function.
+
+Type paste(my_char, collapse = " ") now. Make sure there's a space between the double quotes in the `collapse` argument. You'll see why in a second.
+```{r}
+paste(my_char, collapse = " ")
+```
+The `collapse` argument to the paste() function tells R that when we join together the elements of the my_char character vector, we'd like to separate them with single spaces.
+
+To add (or 'concatenate') your name to the end of my_char, use the c() function like this: c(my_char, "your_name_here"). Place your name in double quotes where I've put "your_name_here". Try it now, storing the result in a new variable called my_name.
+```{r}
+my_name <- c(my_char, "Mori")
+```
+Take a look at the contents of my_name.
+```{r}
+my_name
+```
+Now, use the paste() function once more to join the words in my_name together into a single character string. Don't forget to say collapse = " "!
+```{r}
+paste(my_name, collapse = " ")
+```
+
+### `sep`
+Try paste("Hello", "world!", sep = " "), where the `sep` argument tells R that we want to separate the joined elements with a single space.
+```{r}
+paste("Hello", "world!", sep = " ")
+```
+
+Use paste() to join the integer vector 1:3 with the character vector c("X", "Y", "Z"). This time, use sep = "" to leave no space between the joined elements.
+```{r}
+paste(1:3, c("X", "Y", "Z"), sep = "")
+```
+
+### Recycling
+Vector recycling! Try paste(LETTERS, 1:4, sep = "-"), where LETTERS is a predefined variable in R containing a character vector of all 26 letters in the English alphabet.
+```{r}
+paste(LETTERS, 1:4, sep = "-")
+```
+Since the character vector LETTERS is longer than the numeric vector 1:4, R simply recycles, or repeats, 1:4 until it matches the length of LETTERS. 
+
+### Coerced
+Also worth noting is that the numeric vector 1:4 gets 'coerced' into a character vector by the paste() function. We'll discuss coercion in another lesson, but all it really means is that the numbers 1, 2, 3, and 4 in the output above are no longer numbers to R, but rather characters "1", "2", "3", and "4".
+
+### Sorting
+
+### List
+```{r}
+x <- list("Los Angeles" = 1, Boston = 2, London = 3) 
+x
+names(x)
+```
+
+
+```{r}
+rm(list=ls())
+```
+
+## 1.5 Missing Values
+Missing values play an important role in statistics and data analysis. Often, missing values must not be ignored, but rather they should be carefully studied to see if there's an underlying pattern or cause for their missingness.
+
+### NA
+Any operation involving NA generally yields NA as the result. To illustrate, let's create a vector c(44, NA, 5, NA) and assign it to a variable x.
+```{r}
+x <- c(44, NA, 5, NA)
+```
+Now, let's multiply x by 3.
+```{r}
+x*3
+```
+Notice that the elements of the resulting vector that correspond with the NA values in x are also NA.
+
+### `rnorm()`
+To make things a little more interesting, lets create a vector containing 1000 draws from a standard normal distribution with y <- rnorm(1000).
+```{r}
+y <- rnorm(1000)
+```
+Next, let's create a vector containing 1000 NAs with z <- rep(NA, 1000).
+```{r}
+z <- rep(NA, 1000)
+```
+
+### `sample()`
+Finally, let's select 100 elements at random from these 2000 values (combining y and z) such that we don't know how many NAs we'll wind up with or what positions they'll occupy in our final vector -- my_data <- sample(c(y, z), 100).
+```{r}
+my_data <- sample(c(y, z), 100)
+```
+
+### `is.na()`
+Let's first ask the question of where our NAs are located in our data. The `is.na()` function tells us whether each element of a vector is NA. Call is.na() on my_data and assign the result to my_na.
+```{r}
+my_na <- is.na(my_data)
+```
+Now, print my_na to see what you came up with.
+```{r}
+my_na
+```
+Everywhere you see a TRUE, you know the corresponding element of my_data is NA. Likewise, everywhere you see a FALSE, you know the corresponding element of my_data is one of our random draws from the standard normal distribution.
+```{r}
+my_data == NA
+```
+The reason you got a vector of all **NAs** is that NA is not really a value, but just a placeholder for a quantity that is not available. Therefore the logical expression is incomplete and R has no choice but to return a vector of the same **length** as **my_data** that contains all NAs.
+
+The key takeaway is to be cautious when using **logical** expressions anytime NAs might creep in, since a **single** NA value can derail the **entire thing**.
+
+### `sum()`
+R represents TRUE as the number 1 and FALSE as the number 0. Therefore, if we take the sum of a bunch of TRUEs and FALSEs, we get the total number of TRUEs. Call the `sum()` function on my_na to count the total number of TRUEs in my_na, and thus the total number of NAs in my_data.
+```{r}
+sum(my_na)
+```
+let's look at a second type of missing value -- NaN, which stands for 'not a number'. To generate NaN, try dividing (using a forward slash) 0 by 0 now.
+```{r}
+0/0
+```
+In R, `Inf` stands for infinity. What happens if you subtract Inf from Inf?
+```{r}
+Inf - Inf
+```
+
+```{r}
+rm(list=ls())
+```
+
+## 1.6 Subsetting Vectors
+In this lesson, we'll see how to extract elements from a vector based on some conditions that we specify. For example, we may only be interested in the first 20 elements of a vector, or only the elements that are not NA, or only those that are positive or correspond to a specific variable of interest. By the end of this lesson, you'll know how to handle each of these scenarios.
+
+Create a vector called x that contains a random ordering of 20 numbers (from a standard normal distribution) and 20 NAs.
+```{r}
+x <- c(rnorm(20), rep(NA, 20))
+```
+
+### Index vector
+The way you tell R that you want to select some particular elements (i.e. a 'subset') from a vector is by placing an 'index vector' in square **brackets** immediately following the name of the vector.
+```{r}
+x[1:10]
+```
+Index vectors come in four different flavors -- **logical vectors**, **vectors of positive integers**, **vectors of negative integers**, and **vectors of character strings** -- each of which we'll cover in this lesson.
+
+### Logical vectors
+One common scenario when working with real-world data is that we want to extract all elements of a vector that are not NA (i.e. missing data).
+```{r}
+x[is.na(x)]
+```
+Recall that `!` gives us the negation of a logical expression, so !is.na(x) can be read as 'is not NA'. Therefore, if we want to create a vector called y that contains all of the non-NA values from x, we can use y <- x[!is.na(x)].
+```{r}
+y <- x[!is.na(x)]
+```
+Print y to the console.
+```{r}
+y
+```
+
+### Positive integer
+Recall that the expression y > 0 will give us a vector of logical values the same length as y, with TRUEs corresponding to values of y that are greater than zero and FALSEs corresponding to values of y that are less than or equal to zero.
+```{r}
+y[y > 0]
+```
+You might wonder why we didn't just start with x[x > 0] to isolate the positive elements of x.
+```{r}
+x[x > 0]
+```
+Since NA is not a value, but rather a placeholder for an unknown quantity, the expression NA > 0 evaluates to NA.
+
+Also we could do this -- x[!is.na(x) & x > 0].
+```{r}
+x[!is.na(x) & x > 0]
+```
+Many programming languages use what's called 'zero-based indexing', which means that the first element of a vector is considered element 0. R uses 'one-based indexing', which (you guessed it!) means the first element of a vector is considered element 1.
+
+Can you figure out how we'd subset the 3rd, 5th, and 7th elements of x? Hint -- Use the c() function to specify the element numbers as a numeric vector.
+```{r}
+x[c(3,5,7)]
+```
+
+### Negative integer
+Whereas x[c(2, 10)] gives us ONLY the 2nd and 10th elements of x, x[c(-2, -10)] gives us all elements of x EXCEPT for the 2nd and 10 elements.
+```{r}
+x[c(-2, -10)]
+```
+Type x[-c(2, 10)] to get the exact same result.
+```{r}
+x[-c(2, 10)]
+```
+
+### Character strings
+Create a numeric vector with three named elements using vect <- c(foo = 11, bar = 2, norf = NA).
+```{r}
+vect <- c(foo = 11, bar = 2, norf = NA)
+```
+When we print vect to the console, you'll see that each element has a **name**.
+```{r}
+vect
+```
+
+### `name()`
+We can also get the names of vect by passing vect as an argument to the names() function.
+```{r}
+names(vect)
+```
+Alternatively, we can create an unnamed vector vect2 with c(11, 2, NA). Do that now.
+```{r}
+vect2 <- c(11, 2, NA)
+```
+Then, we can add the `names` attribute to vect2 after the fact with names(vect2) <- c("foo", "bar", "norf").
+```{r}
+names(vect2) <- c("foo", "bar", "norf")
+```
+
+### `identical()`
+Now, let's check that vect and vect2 are the same by passing them as arguments to the identical() function.
+```{r}
+identical(vect, vect2)
+```
+We can specify a vector of names with vect[c("foo", "bar")].
+```{r}
+vect[c("foo", "bar")]
+```
+
+## 1.7 Matrices and Data Frames
+In this lesson, we'll cover matrices and data frames. Both represent 'rectangular' data types, meaning that they are used to store tabular data, with rows and columns.The main difference, as you'll see, is that matrices can only contain a **single class** of data, while data frames can consist of many **different classes** of data.
+
+Let's create a vector containing the numbers 1 through 20 using the `:` operator. Store the result in a variable called **my_vector**.
+```{r}
+my_vector <- 1:20
+```
+View the contents of the vector you just created.
+```{r}
+my_vector
+```
+
+### `dim()`
+The dim() function tells us the 'dimensions' of an object. What happens if we do dim(my_vector)?
+```{r}
+dim(my_vector)
+```
+Since my_vector is a vector, it doesn't have a `dim` attribute (so it's just NULL), but we can find its length using the `length()` function.
+```{r}
+length(my_vector)
+```
+What happens if we give my_vector a `dim` attribute?
+```{r}
+dim(my_vector) <- c(4, 5)
+```
+In this case, we assigned the value c(4, 5) to the `dim` attribute of my_vector.
+```{r}
+dim(my_vector)
+```
+
+### `attributes()`
+Another way to see this is by calling the attributes() function on my_vector.
+```{r}
+attributes(my_vector)
+```
+The first number is the number of rows and the second is the number of columns. Therefore, we just gave my_vector **4 rows** and **5 columns**. Now it's a matrix. View the contents of my_vector now to see what it looks like.
+```{r}
+my_vector
+```
+Now, let's confirm it's actually a matrix by using the `class()` function.
+```{r}
+class(my_vector)
+```
+Store the value of my_vector in a new variable called my_matrix.
+```{r}
+my_matrix <- my_vector
+```
+
+### `matrix()`
+The example that we've used so far was meant to illustrate the point that a matrix is simply an atomic vector with a dimension attribute. A more direct method of creating the same matrix uses the `matrix()` function.
+```{r}
+my_matrix2 <- matrix(1:20, 4, 5)
+```
+Finally, let's confirm that my_matrix and my_matrix2 are actually identical.
+```{r}
+identical(my_matrix, my_matrix2)
+```
+Now, imagine that the numbers in our table represent some measurements from a **clinical experiment**, where each **row** represents one **patient** and each **column** represents one **variable** for which measurements were taken.
+
+We may want to label the rows, so that we know which numbers belong to each patient in the experiment. Let's start by creating a character vector containing the names of our patients **Bill, Gina, Kelly, and Sean**.
+```{r}
+patients <- c("Bill", "Gina", "Kelly", "Sean")
+```
+
+### `cbind()`
+Now we'll use the cbind() function to 'combine columns'. Don't worry about storing the result in a new variable. Just call cbind() with two arguments -- the patients vector and my_matrix.
+```{r}
+cbind(patients, my_matrix)
+```
+Something is fishy about our result! It appears that combining the character vector with our matrix of numbers caused everything to be enclosed in **double quotes**. This means we're left with a matrix of character strings, which is **no good**. When we tried to combine a character vector with a numeric matrix, R was forced to 'coerce' the numbers to characters, hence the double quotes.
+
+### Implicit coercion
+This is called 'implicit coercion', because we didn't ask for it. It just happened.
+
+### `data.frame()`
+```{r}
+my_data <- data.frame(patients, my_matrix)
+```
+Now view the contents of my_data to see what we've come up with.
+```{r}
+my_data
+```
+It looks like the data.frame() function allowed us to store our **character** vector of names right alongside our matrix of **numbers**.
+```{r}
+class(my_data)
+```
+Since we have six columns (including patient names), we'll need to first create a vector containing one element for each column. Create a character vector called cnames that contains the following values (in order) -- "patient", "age", "weight", "bp", "rating", "test".
+```{r}
+cnames <- c("patient", "age", "weight", "bp", "rating", "test")
+```
+
+### `colnames()`
+Now, use the colnames() function to set the `colnames` attribute for our data frame.
+```{r}
+colnames(my_data) <- cnames
+```
+Print the contents of my_data
+```{r}
+my_data
+```
+
+In summary:
+In **data frame**, for Setting column names we use **`names()`** and for Setting row names we use **`row.names()`**.
+In **matrix**, for Setting column names we use **`colnames()`** and for Setting row names we use **`rownames()`**.
+
+## 1.8 Logic
+his lesson is meant to be a short introduction to logical operations in R. There are two logical values in R, also called boolean values. They are TRUE and FALSE.
+
+### `==`
+Use the equality operator to find out if TRUE is equal to TRUE.
+```{r}
+TRUE == TRUE
+```
+To test out this property, try evaluating (FALSE == TRUE) == FALSE.
+```{r}
+(FALSE == TRUE) == FALSE
+```
+The equality operator can also be used to compare numbers. Use `==` to see if 6 is equal to 7.
+```{r}
+6==7
+```
+
+### `<`
+The less than operator `<` tests whether the number on the left side of the operator (called the left operand) is less than the number on the right side of the operator (called the right operand).
+```{r}
+6 < 7
+```
+
+### `<=`
+```{r}
+10 <= 10
+```
+
+### `!=`
+```{r}
+5 != 7
+```
+
+### `!`
+In order to negate boolean expressions you can use the NOT operator. An **exclamation point `!`** will cause !TRUE (say: not true) to evaluate to FALSE and !FALSE (say: not false) to evaluate to TRUE.
+```{r}
+!5 == 7
+!(0 >= -1)
+(TRUE != FALSE) == !(6 == 7)
+```
+
+### `&`, `|`
+At some point you may need to examine relationships between multiple logical expressions. This is where the **AND** operator and the **OR** operator come in.
+
+### `&`, `&&`
+There are two AND operators in R, `&` and `&&`. Both operators work similarly, if the right and left operands of AND are both TRUE the entire expression is TRUE, otherwise it is FALSE.
+```{r}
+FALSE & FALSE
+```
+The `&&` version of AND only evaluates the first member of a vector.
+```{r}
+TRUE & c(TRUE, FALSE, FALSE)
+TRUE && c(TRUE, FALSE, FALSE)
+```
+In this case, the left operand is only evaluated with the first member of the right operand (the vector).
+
+### `|`, `||`
+The OR operator follows a similar set of rules. The `|` version of OR evaluates OR across an entire vector, while the `||` version of OR only evaluates the first member of a vector.
+```{r}
+TRUE | c(TRUE, FALSE, FALSE)
+TRUE || c(TRUE, FALSE, FALSE)
+```
+
+Arithmetic has an order of operations and so do logical expressions.All AND operators are evaluated before OR operators.
+```{r}
+5 > 8 || 6 != 8 && 4 > 3.9
+TRUE && FALSE || 9 >= 4 && 3 < 6
+99.99 > 100 || 45 < 7.3 || 4 != 4.0
+```
+
+### `isTRUE()`
+The function isTRUE() takes one argument. If that argument evaluates to TRUE, the function will return TRUE.
+```{r}
+isTRUE(6 > 4)
+!isTRUE(4 < 3)
+identical('twins', 'twins')
+identical(5 > 4, 3 < 3.1)
+!identical(7, 7)
+```
+
+### `xor()`
+You should also be aware of the `xor()` function, which takes two arguments. The `xor()` function stands for exclusive OR. If one argument evaluates to **TRUE** and one argument evaluates to **FALSE**, then this function will return **TRUE**, **otherwise** it will return FALSE.
+```{r}
+xor(5 == 6, !FALSE)
+xor(TRUE, TRUE)
+xor(4 >= 9, 8 != 8.0)
+xor(identical(xor, 'xor'), 7 == 7.0)
+```
+
+we're going to need to create a vector of integers called ints.
+```{r}
+ints <- sample(10)
+```
+The vector `ints` is a random sampling of integers from 1 to 10 without replacement.
+```{r}
+ints > 5
+```
+
+### `which()`
+The which() function takes a logical vector as an argument and returns the indices of the vector that are TRUE.
+```{r}
+which(ints > 7)
+which(ints <= 2)
+```
+
+### `any()`
+The any() function will return TRUE if one or more of the elements in the logical vector is TRUE.
+```{r}
+any(ints < 0)
+any(ints == 10)
+any(ints == 2.5)
+```
+
+### `all()`
+The all() function will return TRUE if every element in the logical vector is TRUE.
+```{r}
+all(ints > 0)
+all(ints == 10)
+all(c(TRUE, FALSE, TRUE))
+```
+
+## 1.9 Functions
+Functions are one of the fundamental building blocks of the R language. They are small pieces of reusable code that can be treated like any other R object. Functions are usually characterized by the name of the function followed by parentheses.
+
+### `Sys.Date()`
+The `Sys.Date()` function returns a string representing today's date.
+Functions like `Sys.Date()` return a value based on your computer's environment, while other functions manipulate input data in order to compute a return value.
+
+### `mean()`
+The `mean()` function takes a vector of numbers as input, and returns the average of all of the numbers in the input vector. Inputs to functions are often called **arguments**. Providing arguments to a function is also sometimes called **passing arguments** to that function. Arguments you want to pass to a function go **inside the function's parentheses**.
+```{r}
+mean(c(2, 4, 5))
+```
+
+### Writing a Function
+function_name <- function(arg1, arg2){
+	Manipulate arguments in some way
+	Return a value
+ }
+
+Below we will create a function called boring_function. This function takes the argument `x` as input, and returns the value of x without modifying it. Delete the pound sign in front of the x to make the function work! Be sure to save this script and type submit() in the console after you make your changes.
+```{r}
+boring_function <- function(x) {
+  x
+}
+```
+Now that you've created your first function let's test it! Type: boring_function('My first function!'). If your function works, it should just return the string: 'My first function!'
+```{r}
+boring_function('My first function!')
+```
+By writing functions, you can gain serious insight into how R works. As John Chambers, the creator of R once said:
+
+"To understand computations in R, two slogans are helpful: 1. Everything that exists is an object. 2. Everything that happens is a function call."
+
+If you want to see the **source code** for any function, just type the function name without any arguments or parentheses.
+```{r}
+boring_function
+```
+
+### `my_mean()` function
+We're going to replicate the functionality of the mean() function by creating a function called: my_mean().
+You're free to implement the function my_mean however you want, as long as it returns the average of all of the numbers in `my_vector`.
+
+Hint #1: sum() returns the sum of a vector. Ex: sum(c(1, 2, 3)) evaluates to 6
+
+Hint #2: length() returns the size of a vector. Ex: length(c(1, 2, 3)) evaluates to 3
+
+Hint #3: The mean of all the numbers in a vector is equal to the sum of all of the numbers in the vector divided by the size of the vector.
+
+Note for those of you feeling super clever: Please do not use the mean() function while writing this function.
+```{r}
+my_mean <- function(my_vector) {
+  sum(my_vector)/length(my_vector)
+}
+```
+
+Now test out your my_mean() function by finding the mean of the vector c(4, 5, 10).
+```{r}
+my_mean(c(4, 5, 10))
+```
+
+### `remainder()` function
+Next, let's try writing a function with default arguments. You can set default values for a function's arguments, and this can be useful if you think someone who uses your function will set a certain argument to the same value most of the time.
+
+You're going to write a function called "remainder." `remainder()` will take two arguments: "num" and "divisor" where "num" is divided by "divisor" and the remainder is returned. Imagine that you usually want to know the remainder when you divide by 2, so set the default value of "divisor" to 2. Please be sure that "num" is the first argument and "divisor" is the second argument.
+
+Hint #1: You can use the modulus operator %% to find the remainder. Ex: 7 %% 4 evaluates to 3.
+```{r}
+remainder <- function(num, divisor = 2) {
+  num %% divisor
+}
+```
+
+Run remainder(5) and see what happens.
+```{r}
+remainder(5)
+```
+
+Now let's test the remainder function by providing two arguments.
+```{r}
+remainder(11, 5)
+```
+You can also explicitly specify arguments in a function. When you explicitly designate argument values by name, the ordering of the arguments becomes unimportant.
+```{r}
+remainder(divisor = 11, num = 5)
+```
+R can also partially match arguments.
+```{r}
+remainder(4, div = 2)
+```
+A word of warning: in general you want to make your code as easy to understand as possible. Switching around the orders of arguments by specifying their names or only using partial argument names can be confusing, so use these features with caution!
+```{r}
+args(remainder)
+```
+
+### Passing functions as arguments
+Finish the function definition below so that if a function is passed into the "func" argument and some data (like a vector) is passed into the dat argument the `evaluate()` function will return the result of dat being passed as an argument to func.
+
+Hints: This exercise is a little tricky so I'll provide a few example of how evaluate() should act:
+  1. evaluate(sum, c(2, 4, 6)) should evaluate to 12
+  2. evaluate(median, c(7, 40, 9)) should evaluate to 9
+  3. evaluate(floor, 11.1) should evaluate to 11
+```{r}
+evaluate <- function(func, dat){
+  func(dat) 
+}
+```
+
+Use evaluate to find the standard deviation of the vector c(1.4, 3.6, 7.9, 8.8).
+```{r}
+evaluate(sd, c(1.4, 3.6, 7.9, 8.8))
+```
+
+### Anonymous functions
+You may be surprised to learn that you can pass a function as an argument without first defining the passed function. Functions that are not named are appropriately known as **anonymous functions**.
+
+Let's use the evaluate function to explore how anonymous functions work. For the first argument of the evaluate function we're going to write a tiny function that fits on one line. In the second argument we'll pass some data to the tiny anonymous function in the first argument.
+```{r}
+evaluate(function(x){x+1}, 6)
+```
+The first argument is a tiny anonymous function that takes one argument `x` and returns `x+1`. We passed the number 6 into this function so the entire expression evaluates to 7.
+
+Try using evaluate() along with an anonymous function to return the first element of the vector c(8, 4, 0). Your anonymous function should only take one argument which should be a variable `x`.
+```{r}
+evaluate(function(x){x[1]}, c(8, 4, 0))
+```
+
+Now try using evaluate() along with an anonymous function to return the last element of the vector c(8, 4, 0). Your anonymous function should only take one argument which should be a variable `x`.
+```{r}
+evaluate(function(x){x[length(x)]}, c(8, 4, 0))
+```
+
+### `paste()`
+In the case of paste() any number of strings can be passed as arguments and paste() will return all of the strings combined into one string.
+```{r}
+paste("Programming", "is", "fun!")
+```
+
+### `...` ellipses
+Telegrams used to be peppered with the words START and STOP in order to demarcate the beginning and end of sentences. Write a function below called  telegram that formats sentences for telegrams. For example the expression `telegram("Good", "morning")` should evaluate to: "START Good morning STOP".
+```{r}
+telegram <- function(...){
+  paste("START", ..., "STOP")
+}
+```
+Now let's test out your telegram function. Use your new telegram function passing in whatever arguments you wish!
+```{r}
+telegram("This is Mori")
+```
+
+### `mad_libs()` function
+Let's explore how to "unpack" arguments from an ellipses when you use the ellipses as an argument in a function. Below I have an example function that is supposed to add two explicitly named arguments called alpha and beta.
+ 
+add_alpha_and_beta <- function(...){
+   
+   First we must capture the ellipsis inside of a list
+   
+   and then assign the list to a variable. Let's name this
+   
+   variable `args`.
+
+   args <- list(...)
+
+   We're now going to assume that there are two named arguments within args
+   
+   with the names `alpha` and `beta.` We can extract named arguments from
+   
+   the args list by used the name of the argument and double brackets. The
+   
+   `args` variable is just a regular list after all!
+  
+   alpha <- args[["alpha"]]
+  
+   beta  <- args[["beta"]]
+
+   Then we return the sum of alpha and beta.
+
+   alpha + beta 
+
+}
+
+Have you ever played Mad Libs before? The function below will construct a sentence from parts of speech that you provide as arguments. We'll write most of the function, but you'll need to unpack the appropriate arguments from the ellipses.
+```{r}
+mad_libs <- function(...){
+  args <- list(...)
+  place <- args[["place"]]
+  adjective <- args[["adjective"]]
+  noun <- args[["noun"]]
+  paste("News from", place, "today where", adjective, "students took to the streets in protest of the new", noun, "being installed on campus.")
+}
+```
+Time to use your mad_libs function. Make sure to name the place, adjective, and noun arguments in order for your function to work.
+```{r}
+mad_libs(place="Tehran", adjective="unpleasant", noun="rule")
+```
+
+### Binary operator
+Write your own binary operator below from absolute scratch! Your binary operator must be called %p% so that the expression:
+
+      "Good" %p% "job!"
+      
+will evaluate to: "Good job!"
+```{r}
+"%p%" <- function(left, right){
+  paste(left, right)
+}
+```
+Let's test it out.
+```{r}
+'I' %p% 'love' %p% 'R!'
+```
+
+
+## 1.10 lapply and sapply
+In this lesson, you'll learn how to use `lapply()` and `sapply()`, the two most important members of R's **apply family** of functions, also known as loop functions. These powerful functions, along with their close relatives (`vapply()` and `tapply()`, among others) offer a concise and convenient means of implementing the Split-Apply-Combine strategy for data analysis.
+
+Each of the **apply** functions will **SPLIT** up some data into **smaller** pieces, APPLY a function to each piece, then **COMBINE** the results. A more detailed discussion of this strategy is found in Hadley Wickham's Journal of Statistical Software paper titled **'The Split-Apply-Combine Strategy for Data Analysis'**.
+
+### `read.table()`
+Throughout this lesson, we'll use the Flags dataset from the UCI Machine Learning Repository. This dataset contains details of various nations and their flags. More information may be found here: http://archive.ics.uci.edu/ml/datasets/Flags.
+
+Type head(flags) to preview the first six lines (i.e. the 'head') of the dataset.
+```{r}
+flags <- read.table("flags_file4")
+head(flags)
+```
+Now, let's check out the dimensions of the dataset using dim(flags).
+```{r}
+dim(flags)
+```
+
+This tells us that there are 194 rows, or observations, and 30 columns, or variables. Each observation is a country and each variable describes some characteristic of that country or its flag.
+```{r}
+class(flags)
+```
+
+### `lapply()`
+The lapply() function takes a list as input, applies a function to each element of the list, then returns a list of the same length as the original one. Since a data frame is really just a list of vectors (you can see this with as.list(flags)), we can use lapply() to apply the class() function to each column of the flags dataset.
+```{r}
+cls_list <- lapply(flags, class)
+```
+Type cls_list to view the result.
+```{r}
+ cls_list
+```
+The 'l' in 'lapply' stands for 'list'. Type class(cls_list) to confirm that lapply() returned a list.
+```{r}
+class(cls_list)
+```
+
+### `as.character()`
+In this case, since every element of the list returned by lapply() is a character vector of length one (i.e. "integer" and "vector"), cls_list can be simplified to a character vector.
+```{r}
+as.character(cls_list)
+```
+
+### `sapply()`
+sapply() allows you to automate this process by calling lapply() behind the scenes, but then attempting to simplify (hence the 's' in 'sapply') the result for you.
+```{r}
+cls_vect <- sapply(flags, class)
+```
+Use class(cls_vect) to confirm that sapply() simplified the result to a character vector.
+```{r}
+class(cls_vect)
+```
+
+In general, if the result is a list where every element is of length one, then sapply() returns a vector. If the result is a list where every element is a vector of the same length (> 1), sapply() returns a matrix. If sapply() can't figure things out, then it just returns a list, no different from what lapply() would give you.
+
+if we want to know the total number of countries (in our dataset) with, for example, the color orange on their flag, we can just add up all of the 1s and 0s in the 'orange' column. Try sum(flags$orange) to see this.
+```{r}
+sum(flags$orange)
+```
+
+Now we want to repeat this operation for each of the colors recorded in the dataset. First, use flag_colors <- flags[, 11:17] to extract the columns containing the color data and store them in a new data frame called flag_colors. (Note the comma before 11:17. This subsetting command tells R that we want all rows, but only columns 11 through 17.)
+```{r}
+flag_colors <- flags[, 11:17]
+```
+
+Use the `head()` function to look at the first 6 lines of flag_colors.
+```{r}
+head(flag_colors)
+```
+
+To get a list containing the sum of each column of flag_colors, call the lapply() function with two arguments. The first argument is the object over which we are looping (i.e. flag_colors) and the second argument is the name of the function we wish to apply to each column (i.e. sum). Remember that the second argument is just the name of the function with no parentheses, etc.
+```{r}
+lapply(flag_colors, sum)
+```
+This tells us that of the 194 flags in our dataset, 153 contain the color red, 91 contain green, 99 contain blue, and so on. The result is a list, since lapply() always returns a list. Each element of this list is of length one, so the result can be simplified to a vector by calling sapply() instead of lapply().
+```{r}
+sapply(flag_colors, sum)
+```
+
+Use sapply() to apply the mean() function to each column of flag_colors.
+```{r}
+sapply(flag_colors, mean)
+```
+
+let's extract columns 19 through 23 from the flags dataset and store the result in a new data frame called flag_shapes.
+```{r}
+flag_shapes <- flags[, 19:23]
+```
+
+### `range()`
+The range() function returns the minimum and maximum of its first argument, which should be a numeric vector. Use lapply() to apply the range function to each column of flag_shapes.
+```{r}
+lapply(flag_shapes, range)
+```
+Do the same operation, but using sapply() and store the result in a variable called shape_mat.
+```{r}
+shape_mat <- sapply(flag_shapes, range)
+```
+View the contents of shape_mat.
+```{r}
+shape_mat
+class(shape_mat)
+```
+As we've seen, sapply() always attempts to simplify the result given by lapply(). It has been successful in doing so for each of the examples we've looked at so far. Let's look at an example where sapply() can't figure out how to simplify the result and thus returns a list, no different from lapply().
+
+### `unique()`
+When given a vector, the unique() function returns a vector with all duplicate elements removed.
+
+We want to know the unique values for each variable in the flags dataset.
+```{r}
+unique_vals <- lapply(flags, unique)
+```
+Print the value of unique_vals to the console.
+```{r}
+unique_vals
+```
+Since unique_vals is a list, you can use what you've learned to determine the length of each element of unique_vals (i.e. the number of unique values for each variable).
+```{r}
+sapply(unique_vals, length)
+```
+The fact that the elements of the unique_vals list are all vectors of *different* length poses a problem for sapply(), since there's no obvious way of simplifying the result.
+```{r}
+sapply(flags, unique)
+```
+
+Pretend you are interested in only the second item from each element of the unique_vals list that you just created.
+```{r}
+lapply(unique_vals, function(elem) elem[2])
+```
+The only difference between previous examples and this one is that we are defining and using our own function right in the call to lapply(). Our function has no name and disappears as soon as lapply() is done using it. So-called 'anonymous functions' can be very useful when one of R's built-in functions isn't an option.
+
+## 1.11 vapply and tapply
+In the last lesson, you learned about the two most fundamental members of R's apply family of functions: lapply() and sapply(). Both take a **list as input**, apply a function to each element of the list, then combine and return the result. lapply() always returns a **list**, whereas sapply() attempts to **simplify** the result.
+```{r}
+sapply(flags, unique)
+```
+
+### `vapply()`
+Whereas sapply() tries to 'guess' the correct format of the result, vapply() allows you to specify it explicitly. If the result doesn't match the format you specify, vapply() will throw an error, causing the operation to stop. This can prevent significant problems in your code that might be caused by getting unexpected return values from sapply().
+
+```{r eval=FALSE, include=FALSE}
+vapply(flags, unique, numeric(1))
+```
+
+If we wish to be explicit about the format of the result we expect, we can use vapply(flags, class, character(1)). The 'character(1)' argument tells R that we expect the class function to return a character vector of length 1 when applied to EACH column of the flags dataset.
+```{r}
+sapply(flags, class)
+vapply(flags, class, character(1))
+```
+Note that since our expectation was correct (i.e. character(1)), the vapply() result is identical to the sapply() result -- a character vector of column classes.
+
+Vapply() may perform faster than sapply() for large datasets. However, when doing data analysis interactively (at the prompt), sapply() saves you some typing and will often be good enough.
+
+### `tapply()`
+The 'landmass' variable in our dataset takes on integer values between 1 and 6, each of which represents a different part of the world.
+```{r}
+table(flags$landmass)
+```
+The 'animate' variable in our dataset takes the value 1 if a country's flag contains an animate image (e.g. an eagle, a tree, a human hand) and 0 otherwise.
+```{r}
+table(flags$animate)
+```
+
+If you take the arithmetic mean of a bunch of 0s and 1s, you get the proportion of 1s. Use tapply(flags$animate, flags$landmass, mean) to apply the mean function to the 'animate' variable separately for each of the six landmass groups, thus giving us the proportion of flags containing an animate image WITHIN each landmass group.
+```{r}
+tapply(flags$animate, flags$landmass, mean)
+```
+
+The first landmass group (landmass = 1) corresponds to North America and contains the highest proportion of flags with an animate image (0.4194).
+
+Similarly, we can look at a summary of population values (in round millions) for countries with and without the color red on their flag.
+```{r}
+tapply(flags$population, flags$red, summary)
+```
+
+In this lesson, you learned how to use vapply() as a safer alternative to sapply(), which is most helpful when writing your own functions. You also learned how to use tapply() to split your data into groups based on the value of some variable, then apply a function to each group. These functions will come in handy on your quest to become a better data analyst.
+
+## 1.12 Looking at Data
+Whenever you're working with a new dataset, the first thing you should do is look at it! What is the **format** of the data? What are the **dimensions**? What are the **variable names**? How are the **variables stored**? Are there **missing data**? Are there any **flaws** in the data?
+
+### `class()`
+```{r}
+plants <- read.table("plants_file")
+class(plants)
+```
+
+### `dim()`
+It's very common for data to be stored in a data frame. It is the default class for data read into R using functions like read.csv() and read.table(), which you'll learn about in another lesson.
+```{r}
+dim(plants)
+```
+
+### `nrow()`
+You can also use nrow(plants) to see only the number of rows.
+```{r}
+nrow(plants)
+```
+
+### `ncol()`
+And for columns,
+```{r}
+ncol(plants)
+```
+
+### `object.size()`
+If you are curious as to how much space the dataset is occupying in memory, you can use object.size(plants).
+```{r}
+object.size(plants)
+```
+
+### `names()`
+And for character vector of column (i.e. variable) names.
+```{r}
+names(plants)
+```
+
+### `head()`
+For preview the top of the dataset,
+```{r}
+head(plants)
+```
+By default, head() shows you the first six rows of the data.
+```{r}
+head(plants, 10)
+```
+
+### `tail()`
+```{r}
+tail(plants, 15)
+```
+
+### `summary()`
+```{r}
+summary(plants)
+```
+For categorical variables (called 'factor' variables in R), summary() displays the number of times each value (or 'level') occurs in the data.
+
+### `table()`
+You can see that R truncated the summary for Active_Growth_Period by including a catch-all category called 'Other'. Since it is a categorical/factor variable, we can see how many times each value actually occurs in the data with table(plants$Active_Growth_Period).
+```{r}
+table(plants$Active_Growth_Period)
+```
+
+Each of the functions we've introduced so far has its place in helping you to better understand the structure of your data. However, we've left the best for last....
+
+### `str()`
+Perhaps the most useful and concise function for understanding the *str*ucture of your data is `str()`.
+```{r}
+str(plants)
+```
+`str()` is actually a very general function that you can use on most objects in R. Any time you want to understand the structure of something (a dataset, function, etc.), `str()` is a good place to start.
+
+
+# 1.13 Simulation
+One of the great advantages of using a statistical programming language like R is its vast collection of tools for simulating random numbers.
+
+This lesson assumes familiarity with a few common probability distributions, but these topics will only be discussed with respect to random number generation. Even if you have no prior experience with these concepts, you should be able to complete the lesson and understand the main ideas.
+```{r}
+sample(1:6, 4, replace = TRUE)
+sample(1:6, 4, replace = TRUE)
+```
+
+sample(1:6, 4, replace = TRUE) instructs R to randomly select four numbers between 1 and 6, WITH replacement. Sampling with replacement simply means that each number is "replaced" after it is selected, so that the same number can show up more than once. This is what we want here, since what you roll on one die shouldn't affect what you roll on any of the others.
+
+```{r}
+sample(LETTERS)
+```
+
+Now, suppose we want to simulate 100 flips of an unfair two-sided coin. This particular coin has a 0.3 probability of landing 'tails' and a 0.7 probability of landing 'heads'.
+
+```{r}
+flips <- sample(c(0,1), 100, replace = TRUE, prob = c(0.3, 0.7))
+```
+View the contents of the flips variable.
+```{r}
+flips
+```
+Since we set the probability of landing heads on any given flip to be 0.7, we'd expect approximately 70 of our coin flips to have the value 1. Count the actual number of 1s contained in flips using the sum() function.
+
+```{r}
+sum(flips)
+```
+
+### `rbinom()`
+A binomial random variable represents the number of 'successes' (heads) in a given number of independent 'trials' (coin flips). Therefore, we can generate a single random variable that represents the number of heads in 100 flips of our unfair coin using rbinom(1, size = 100, prob = 0.7). Note that you only specify
+the probability of 'success' (heads) and NOT the probability of 'failure'
+(tails).
+```{r}
+rbinom(1, size = 100, prob = 0.7)
+```
+
+if we want to see all of the 0s and 1s, we can request 100 observations, each of size 1, with success probability of 0.7.
+```{r}
+flips2 <- rbinom(100, size = 1, prob = 0.7)
+```
+
+View the contents of flips2.
+```{r}
+flips2
+```
+
+Now use sum() to count the number of 1s (heads) in flips2. It should be close to 70!
+```{r}
+sum(flips2)
+```
+
+Similar to rbinom(), we can use R to simulate random numbers from many other probability distributions.
+
+### `rnorm()`
+`rnorm(10)` will generate 10 random numbers from a standard normal distribution.
+```{r}
+rnorm(10)
+```
+
+Now do the same, except with a mean of 100 and a standard deviation of 25.
+```{r}
+rnorm(10, mean = 100, sd = 25)
+```
+
+### `rpois()`
+Finally, what if we want to simulate 100 *groups* of random numbers, each containing 5 values generated from a Poisson distribution with mean 10?
+
+Generate 5 random values from a Poisson distribution with mean 10.
+```{r}
+rpois(5, 10)
+```
+
+### `replicate()`
+Now use replicate(100, rpois(5, 10)) to perform this operation 100 times. Store the result in a new variable called my_pois.
+```{r}
+my_pois <- replicate(100, rpois(5, 10))
+```
+Take a look at the contents of my_pois.
+```{r}
+my_pois
+```
+
+### `colMeans()`
+replicate() created a matrix, each column of which contains 5 random numbers generated from a Poisson distribution with mean 10. Now we can find the mean of each column in my_pois using the `colMeans()` function. Store the result in a variable called cm.
+```{r}
+cm <- colMeans(my_pois)
+```
+
+### `hist()`
+And let's take a look at the distribution of our column means by plotting a histogram with hist(cm).
+```{r}
+hist(cm)
+```
+Looks like our column means are almost normally distributed, right? That's the Central Limit Theorem at work.
+
+All of the standard probability distributions are built into R, including exponential (rexp()), chi-squared (rchisq()), gamma (rgamma()), .... Well, you see the pattern.
+
+## 1.14 Dates and Times
+R has a special way of representing dates and times, which can be helpful if you're working with data that show how something changes over time (i.e. time-series data) or if your data contain some other temporal information, like dates of birth.
+
+### `Sys.Date()`
+Dates are represented by the 'Date' class and times are represented by the 'POSIXct' and 'POSIXlt' classes. Internally, dates are stored as the number of days since 1970-01-01 and times are stored as either the number of seconds since 1970-01-01 (for 'POSIXct') or a list of seconds, minutes, hours, etc. (for 'POSIXlt').
+```{r}
+d1 <- Sys.Date()
+class(d1)
+```
+
+### `unclass()`
+We can use the `unclass()` function to see what d1 looks like internally.
+```{r}
+unclass(d1)
+```
+That's the exact number of days since 1970-01-01!
+
+What if we need to reference a date prior to 1970-01-01? 
+```{r}
+d2 <- as.Date("1969-01-01")
+unclass(d2)
+```
+As you may have anticipated, you get a negative number. In this case, it's -365, since 1969-01-01 is exactly one calendar year (i.e. 365 days) BEFORE 1970-01-01.
+
+### `Sys.time()`
+```{r}
+t1 <- Sys.time()
+t1
+class(t1)
+```
+Use unclass() to see what t1 looks like internally -- the (large) number of seconds since the beginning of 1970.
+```{r}
+unclass(t1)
+```
+
+### `as.POSIXlt()`
+By default, Sys.time() returns an object of class POSIXct, but we can coerce the result to POSIXlt with as.POSIXlt(Sys.time()).
+```{r}
+t2 <- as.POSIXlt(Sys.time())
+class(t2)
+t2
+unclass(t2)
+```
+t2, like all POSIXlt objects, is just a list of values that make up the date and time.
+```{r}
+str(unclass(t2))
+```
+
+If, for example, we want just the minutes from the time stored in t2, we can access them with t2$min.
+```{r}
+t2$min
+```
+
+### `weekdays()`
+```{r}
+weekdays(d1)
+```
+
+### `months()`
+```{r}
+months(t1)
+```
+
+### `quarters()`
+```{r}
+quarters(t2)
+```
+
+### `strptime()`
+strptime() converts character vectors to POSIXlt. In that sense, it is similar to as.POSIXlt(), except that the input doesn't have to be in a particular format (YYYY-MM-DD).
+```{r}
+t3 <- "October 17, 1986 08:24"
+```
+Now, use strptime(t3, "%B %d, %Y %H:%M") to help R convert our date/time object to a format that it understands.
+```{r}
+t4 <- strptime(t3, "%B %d, %Y %H:%M")
+t4
+class(t4)
+```
+
+
+```{r}
+Sys.time() > t1
+Sys.time() - t1
+```
+
+### `difftime()`
+```{r}
+difftime(Sys.time(), t1, units = 'days')
+```
+In this lesson, you learned how to work with dates and times in R. While it is important to understand the basics, if you find yourself working with dates and times often, you may want to check out the lubridate package by Hadley Wickham.
+
+## 1.15 Base Graphics
+One of the greatest strengths of R, relative to other programming languages, is the ease with which we can create publication-quality graphics. In this lesson, you'll learn about base graphics in R.
+
+We do not cover the more advanced portions of graphics in R in this lesson. These include **lattice, ggplot2 and ggvis**.
+
+```{r}
+data(cars)
+?cars
+head(cars)
+plot(cars)
+```
+As always, R tries very hard to give you something sensible given the information that you have provided to it. First, R notes that the data frame you have given it has just two columns, so it assumes that you want to plot one column versus the other. Second, since we do not provide labels for either axis, R uses the names of the columns. Third, it creates axis tick marks at nice round numbers and labels them accordingly. Fourth, it uses the other defaults supplied in plot().
+
+Note that 'plot' is short for scatterplot.
+```{r}
+plot(x = cars$speed, y = cars$dist)
+plot(x = cars$dist, y = cars$speed)
+```
+
+### `xlab`
+Recreate the plot with the label of the x-axis set to "Speed".
+```{r}
+plot(x = cars$speed, y = cars$dist, xlab = "Speed")
+```
+
+### `ylab`
+Recreate the plot with the label of the y-axis set to "Stopping Distance".
+```{r}
+plot(x = cars$speed, y = cars$dist, xlab = "Speed", ylab = "Stopping Distance")
+```
+
+### `main`
+The reason that plots(cars) worked at the beginning of the lesson was that R was smart enough to know that the first element (i.e., the first column) in cars should be assigned to the x argument and the second element to the y argument.
+```{r}
+plot(cars, main="My Plot")
+```
+
+### `sub`
+Plot cars with a sub title of "My Plot Subtitle".
+```{r}
+plot(cars, sub = "My Plot Subtitle")
+```
+
+### `col`
+Plot cars so that the plotted points are colored red.
+```{r}
+plot(cars, col= 2)
+```
+
+### `xlim`
+Plot cars while limiting the x-axis to 10 through 15.
+```{r}
+plot(cars, xlim=c(10, 15))
+```
+
+### `pch`
+Plot cars using triangles.
+```{r}
+plot(cars, pch = 2)
+```
+
+Arguments like "col" and "pch" may not seem very intuitive. And that is because they aren't! So, many/most people use more modern packages, like ggplot2, for creating their graphics in R. It is, however, useful to have an introduction to base graphics because many of the idioms in lattice and ggplot2 are modeled on them.
+
+```{r}
+data(mtcars)
+```
+
+### `boxplot()`
+Instead of adding data columns directly as input arguments, as we did with plot(), it is often handy to pass in the entire data frame. This is what the "data" argument in boxplot() allows.
+
+boxplot(), like many R functions, also takes a "formula" argument, generally an expression with a tilde ("~") which indicates the relationship between the input variables. This allows you to enter something like mpg ~ cyl to plot the relationship between cyl (number of cylinders) on the x-axis and mpg (miles per gallon) on the y-axis.
+```{r}
+boxplot(mpg ~ cyl, mtcars)
+hist(mtcars$mpg)
+```
+
+
+## Packages
+Hadley Wickham’s package **dplyr** has an optimized set of functions designed to work efficiently with data frames, and **ggplot2** plotting functions work best with data stored in data frames.
+
+
+## 1.10 Reading Tabular Data
+The purpose of this lesson is to demonstrate some basic features of the **'readr'** package in R for reading in tabular data.
+
+For this lesson, we will be using a small dataset on zip codes in the United States. This table contains information about the percent of each zip codes that is considered urban by the U.S. Census Bureau.
+
+First load the 'readr' package using the library() function.
+```{r}
+library(readr)
+```
+
+### `file.path()`
+The file that we will be reading into R is called 'urban.csv.gz'. It is a comma-separated-value (CSV) file compressed with gzip.
+```{r}
+datafile <- file.path("/Users/cyrussabri/RStudio/R_Workshop_Files" ,"urban.csv.gz")
+```
+
+### `read_csv()`
+How would you read this file into R using the read_csv() function in the 'readr' function and save the resulting data frame to an object named 'urban'? Assume that the file is in your current working directory.
+```{r}
+urban <- read_csv(datafile)
+head(urban)
+```
+You'll see that there are 5 columns - state, zcta5 (a 5-digit zip code identifier), County (the name of the county in which the zip code resides), PctUrban (the percentage of the zip code that is considered urban), and FIPS (a 5-digit identifier for the county).
+
+Notice that the second column ("zcta5") was read in as an **integer** column. In most applications we will want this to be a **character** column.
+
+### `col_types`
+How can we use the compact string representation of the **'col_types'** argument to read_csv() to force the "zcta5" column to be character? Leave all of the other columns as the type that the currently are read in as and remember to save the output of read_csv() to an object named 'urban'.
+```{r}
+urban <- read_csv(datafile, col_types = "cccdc")
+```
+
+In order to save some space, we would like to tell read_csv() to not read that last column.
+```{r}
+urban <- read_csv(datafile, col_types = "cccd-")
+head(urban)
+```
+
+### `n_max`
+We may only need the **first few rows** of a table at first and so it might make sense to tell read_csv() to only read in a few rows rather than the entire dataset.
+```{r}
+urban <- read_csv(datafile, col_types = "cccd-", n_max = 100)
+```
+
+
+## 1.11: Data Manipulation
+
+```{r}
+library(dplyr)
+library(tidyr)
+library(titanic)
+library(faraway)
+```
+
+### `select()`
+Use a `dplyr` or `tidyr` function to subset the `worldcup` dataset to four columns, so that the first lines of the resulting data frame (`wc_1`) look like this: 
+
+           Time   Passes  Tackles Saves
+ Abdoun      16        6        0     0
+ Abe        351      101       14     0
+ Abidal     180       91        6     0
+ Abou Diaby 270       111       5     0
+
+```{r}
+wc_1 <- worldcup %>% 
+  select(Time, Passes, Tackles, Saves)
+```
+
+### `summarize()`
+Now use a `dplyr` or `tidyr` function so that `wc_2` data frame looks like this, with four columns, and a single observation (the mean value of each variable):
+
+       Time   Passes  Tackles     Saves
+   208.8639 84.52101 4.191597 0.6672269
+
+```{r}
+wc_2 <- worldcup %>% 
+  select(Time, Passes, Tackles, Saves) %>%
+  summarize(Time = mean(Time),
+            Passes = mean(Passes),
+            Tackles = mean(Tackles),
+            Saves = mean(Saves))
+```
+
+### `gather()`
+Now use a `dplyr` or `tidyr` function so that the `wc_3` data frame looks like this, with variable names in one column and the mean value of each variable in another column:
+
+      var           mean
+     Time    208.8638655
+   Passes     84.5210084
+  Tackles      4.1915966
+    Saves      0.6672269
+
+```{r}
+wc_3 <- worldcup %>% 
+  select(Time, Passes, Tackles, Saves) %>%
+  summarize(Time = mean(Time),
+            Passes = mean(Passes),
+            Tackles = mean(Tackles),
+            Saves = mean(Saves)) %>%
+  gather(var, mean)
+```
+
+### `mutate()`
+Use a `dplyr` or `tidyr` function to continue working with this data so that it looks like this: 
+
+      var     mean
+     Time    208.9
+   Passes     84.5
+  Tackles      4.2
+    Saves      0.7
+
+```{r}
+wc_4 <- worldcup %>% 
+  select(Time, Passes, Tackles, Saves) %>%
+  summarize(Time = mean(Time),
+            Passes = mean(Passes),
+            Tackles = mean(Tackles),
+            Saves = mean(Saves)) %>%
+  gather(var, mean) %>%
+  mutate(mean = round(mean, 1))
+```
+
+Use a `dplyr` or `tidyr` function to change the `titanic` dataset so that the first six lines look like this: 
+
+  Survived  Pclass   Age      Sex
+         0       3    22     male
+         1       1    38   female
+         1       3    26   female
+         1       1    35   female
+         0       3    35     male
+         0       3    NA     male
+
+```{r}
+titanic <- Titanic
+titanic_1 <- titanic %>% 
+  select(Survived, Pclass, Age, Sex)
+```
+
+### `filter()`
+Use a `dplyr` or `tidyr` function to change the `titanic` dataset so that the first six lines look like this: 
+
+  Survived  Pclass   Age      Sex
+         0       3    22     male
+         1       1    38   female
+         1       3    26   female
+         1       1    35   female
+         0       3    35     male
+         0       1    54     male
+
+```{r}
+titanic_2 <- titanic %>% 
+  select(Survived, Pclass, Age, Sex) %>%
+  filter(!is.na(Age))
+```
+
+### `cut()`
+Use a `dplyr` or `tidyr` function to change the `titanic` dataset so that the first six lines look like this, where you've added a column called `agecat` with categories of "Under 15", "15 to 50", and "Over 50" for the passenger's Age: 
+
+   Survived Pclass   Age     Sex      agecat
+          0      3    22    male    15 to 50
+          1      1    38  female    15 to 50
+          1      3    26  female    15 to 50
+          1      1    35  female    15 to 50
+          0      3    35    male    15 to 50
+          0      1    54    male     Over 50
+
+```{r}
+titanic_3 <- titanic %>% 
+  select(Survived, Pclass, Age, Sex) %>%
+  filter(!is.na(Age)) %>%
+  mutate(agecat = cut(Age, breaks = c(0, 14.99, 50, 150), 
+                      include.lowest = TRUE,
+                      labels = c("Under 15", "15 to 50", "Over 50")))
+```
+
+### `group_by()`
+Use a `dplyr` or `tidyr` function or functions to change the `titanic` dataset so that the first six lines look like this, where you've added, for each combination of `Pclass`, `agecat`, and `Sex`, the columns `N` (total number of passengers in that group), `survivors` (the number of people in the group who survived), and `perc_survived` (the percent of people in the group who survived). 
+
+ Pclass   agecat    Sex      N     survivors   perc_survived
+ <int>   <fctr>    <chr>   <int>     <int>         <dbl>
+   1    Under 15  female     2         1         50.00000
+   1    Under 15    male     3         3        100.00000
+   1    15 to 50  female    68        67         98.52941
+   1    15 to 50    male    69        31         44.92754
+   1    Over 50   female    15        14         93.33333
+   1    Over 50     male    29         6         20.68966
+
+```{r}
+titanic_4 <- titanic %>% 
+  select(Survived, Pclass, Age, Sex) %>%
+  filter(!is.na(Age)) %>%
+  mutate(agecat = cut(Age, breaks = c(0, 14.99, 50, 150), 
+                      include.lowest = TRUE,
+                      labels = c("Under 15", "15 to 50", "Over 50"))) %>%
+  group_by(Pclass, agecat, Sex) %>%
+  summarize(N = n(),
+            survivors = sum(Survived == 1),
+            perc_survived = 100 * survivors / N)
+```
+
+
+## 1.13: Text Manipulation Functions
+Most common types of data are encoded in text, even if that text is representing numerical values, so being able to manipulate text as a software developer is essential. R provides several built-in tools for manipulating text, and there is a rich ecosystem of packages for R for text based analysis. First let’s concentrate on some basic text manipulation functions.
+
+```{r}
+x <- "Hello World!"
+x
+paste("Square", "Circle", "Triangle")
+paste("Square", "Circle", "Triangle", sep = "+")
+paste0("Square", "Circle", "Triangle")
+shapes <- c("Square", "Circle", "Triangle")
+paste("My favorite shape is a", shapes)
+paste(shapes, collapse = " ")
+```
+
+### `nchar()`
+The nchar() function counts the number of characters in a string.
+```{r}
+nchar("Count Me!")
+```
+
+### `toupper()` and `tolower()`
+The `toupper()` and `tolower()` functions make strings all uppercase or lowercase respectively.
+```{r}
+cases <- c("CAPS", "low", "Title")
+toupper(cases)
+tolower(cases)
+```
+
+## 1.14: Regular Expressions 
+A regular expression is a string that defines a pattern that could be contained within another string. A regular expression can be used for searching for a string, searching within a string, or replacing one part of a string with another string. In this lesson We might refer to a regular expression as a **regex**, just know that they’re the same thing. Regular expressions use characters to define patterns of other characters. Although that approach may seem problematic at first, we’ll discuss **meta-characters** (characters that describe other characters) and how you can use them to create powerful regular expressions.
+
+### `grepl()`
+One of the most basic functions in R that uses regular expressions is the `grepl()` function, which takes **two arguments** - a regular expression and a string to be searched. If the string contains the specified regular expression then `grepl()` will return **TRUE**, otherwise it will return **FALSE**.
+```{r}
+regular_expression <- "a"
+string_to_search <- "Maryland"
+grepl(regular_expression, string_to_search)
+grepl("u", "Maryland")
+grepl("ryla", "Maryland")
+```
+
+There’s a dataset that comes with R called state.name which is a vector of strings, one for each state in the United States of America. We’re going to use this vector in several of the following examples. Let's take a look at this vector by entering head(state.name):
+```{r}
+head(state.name)
+```
+
+Let’s build a regular expression for identifying several strings in this vector, specifically a regular expression that will match names of states that both start and end with a vowel. The state name could start and end with any vowel, so we won’t be able to match exact sub-strings like in the previous examples. Thankfully we can use metacharacters to look for vowels and other parts of strings.
+
+### `.`
+The first metacharacter that we’ll discuss is ".". The metacharacter that only consists of a period represents any character other than a new line.
+```{r}
+grepl(".", "Maryland")
+grepl("a.b", c("aaa", "aab", "abb", "acadb"))
+```
+
+### `+`, `*`
+You can specify a regular expression that contains a certain number of characters or metacharacters using the **enumeration metacharacters**. The "+" metacharacter indicates that one or more of the preceding expression should be present and "*" indicates that zero or more of the preceding expression is present. Use `grepl()` to see if the string "Maryland" contains one for more of "a".
+```{r}
+grepl("a+", "Maryland")
+grepl("x*", "Maryland")
+```
+
+### `{}`
+You can also specify exact numbers of expressions using **curly brackets {}**. For example "a{5}" specifies "a exactly five times," "a{2,5}" specifies "a between 2 and 5 times," and "a{2,}" specifies "a at least 2 times."
+```{r}
+grepl("s{2}", "Mississippi")
+grepl("i{2,3}", "Mississippi")
+```
+
+### `()`
+In addition to curly brackets you can use **parentheses "()"** to create a capturing group. A capturing group allows you to use quantifiers on other regular expressions. Let's use a capturing group to see if the string "Mississippi" contains the substring "iss" twice.
+```{r}
+grepl("(iss){2}", "Mississippi")
+grepl("(i.{2}){3}", "Mississippi")
+```
+The regular expression roughtly translates to "Mississippi" contain the pattern of an "i" followed by 2 of any character, with that pattern repeated three times adjacently.
+
+### `\\d`
+See if the string "0123456789" contains a digit:
+```{r}
+grepl("\\d", "0123456789")
+```
+see if there are any non-digits in the string "0123456789"
+```{r}
+grepl("\\D", "0123456789")
+```
+
+### `[]`
+You can also specify specific character sets using **straight brackets `[]`**. For example a character set of just the **vowels** would look like - "[aeiou]". You can find the complement to a specific character by putting a carrot `^` after the first bracket. For example "[^aeiou]" matches all characters except the lowercase vowels. You can also specify ranges of characters using a hyphen - inside of the brackets. For example "[a-m]" matches all of the lowercase characters between a and m, while "[5-8]" matches any digit between 5 and 8 inclusive.
+
+See if there is a vowel in the string "rhythms":
+```{r}
+grepl("[aeiou]", "rhythms")
+```
+
+```{r}
+grepl("[a-mA-M]", "ABC")
+```
+
+ou might be wondering how you can use regular expressions to match a particular punctuation mark since many punctuation marks are used as metacharacters! Putting two backslashes before a punctuation mark that is also a metacharacter indicates that you are looking for the symbol and not the metacharacter meaning. For example "\\." indicates you are trying to match a period in a string.
+
+See whether or not a peroid exists in the string "http://www.jhsph.edu/":
+```{r}
+grepl("\\.", "http://www.jhsph.edu/")
+```
+
+More examples:
+```{r}
+grepl("\\+", "tragedy + time = humor")
+grepl("\\*", "tragedy + time = humor")
+grepl("\\.", "tragedy + time = humor")
+```
+
+There are also metacharacters for matching the beginning and the end of a string which are "^" and "$" respectively.
+### `^`
+To see if either string begins with "a":
+```{r}
+grepl("^a", c("bab", "aab"))
+```
+
+### `$`
+To see if the two strings end with the letter "b":
+```{r}
+grepl("b$", c("bab", "aab"))
+```
+
+### `|`
+The **OR** metacharacter matches either the regex on the left or the regex on the right side of this character.
+```{r}
+grepl("a|b", c("abc", "bcd", "cde"))
+```
+
+More examples:
+```{r}
+start_end_vowel <- "^[AEIOU]{1}.+[aeiou]{1}$"
+vowel_state_lgl <- grepl(start_end_vowel, state.name)
+state.name[vowel_state_lgl]
+```
+
+
+## 1.15: The stringr Package
+```{r}
+library(stringr)
+```
+The stringr package is wonderful for working with strings in R. Most of the functions in stringr take the same two arguments, a string and then a regex. However before we get into stringr functions let's cover some of the fundamental string functions in R that use regular expressions.
+```{r}
+grepl("[Ii]", c("Hawaii", "Illinois", "Kentucky"))
+grep("[Ii]", c("Hawaii", "Illinois", "Kentucky"))
+grep("[Aa]", c("Florida", "Alabama", "Idaho"))
+```
+
+### `sub()`
+The `sub()` function takes as arguments a regex, a “replacement,” and a vector of strings. This function will **replace** the first instance of that regex found in each string.
+```{r}
+sub("[Ii]", "1", c("Hawaii", "Illinois", "Kentucky"))
+```
+
+### `gsub()`
+The `gsub()` function is nearly the same as sub() except it will replace every instance of the regex that is matched in each string.
+```{r}
+gsub("[Ii]", "1", c("Hawaii", "Illinois", "Kentucky"))
+gsub("[Aao]", "0", c("Georgia", "Minnesota", "California"))
+```
+
+### `strsplit()`
+```{r}
+two_s <- state.name[grep("ss", state.name)]
+two_s
+strsplit(two_s, "ss")
+```
+
+### `str_extract()`
+The `str_extract()` function returns the sub-string of a string that matches the providied regular expression.
+```{r}
+str_extract("Camaro Z28", "[0-9]+")
+```
+
+### `str_order()`
+The `str_order()` function returns a numeric vector that corresponds to the alphabetical order of the strings in the provided vector.
+```{r}
+str_order(c("p", "e", "n", "g"))
+```
+
+### `str_pad()`
+The `str_pad()` function pads strings with other characters which is often useful when the string is going to be eventually printed for a person to read.
+```{r}
+str_pad("Thai", width = 8, side = "left", pad = "-")
+```
+
+### `str_to_title()`
+The `str_to_title()` function acts just like tolower() and toupper() except it puts strings into Title Case.
+```{r}
+str_to_title(c("CAPS", "low", "Title"))
+```
+
+### `str_trim()`
+The `str_trim()` function deletes whitespace from both sides of a string.
+```{r}
+str_trim(" trim me ")
+```
+
+### `word()`
+the `word()` function allows you to index each word in a string as if it were a vector.
+```{r}
+word("See Spot run.", 2)
+```
+
+
+
+# Section 2: Advanced R Programming
+
+
